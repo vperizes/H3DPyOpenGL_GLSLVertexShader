@@ -1,3 +1,4 @@
+import pygame
 from pygame.locals import *
 from .Camera import *
 from OpenGL.GL import *
@@ -5,15 +6,19 @@ from OpenGL.GLU import *
 import os
 
 
-class PyOGLApp():
-    def __init__(self, screen_posX, screen_posY, screen_width, screen_height):
-        os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (screen_posX, screen_posY)
+class PyOGLApp:
+    def __init__(self, screen_posx, screen_posy, screen_width, screen_height):
+        os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (screen_posx, screen_posy)
         self.screen_width = screen_width
         self.screen_height = screen_height
         pygame.init()
-        screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPENGL)
+        pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLEBUFFERS, 1)
+        pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLESAMPLES, 4)
+        pygame.display.gl_set_attribute(pygame.GL_CONTEXT_PROFILE_MASK, pygame.GL_CONTEXT_PROFILE_CORE)
+        self.screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPENGL)
         pygame.display.set_caption('OpenGL in Python')
         self.camera = Camera()
+        self.program_id = None
 
     def draw_world_axes(self):
         glLineWidth(4)

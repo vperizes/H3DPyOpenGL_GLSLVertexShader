@@ -5,13 +5,13 @@ from OpenGL.GL import *
 # strings of shader code
 def compile_shader(shader_type, shader_source):
     shader_id = glCreateShader(shader_type)  # allows us to reference shader later on
+    glShaderSource(shader_id, shader_source)
     glCompileShader(shader_id)
     # error logic in case of mistakes
     compile_success = glGetShaderiv(shader_id, GL_COMPILE_STATUS)
     if not compile_success:
         error_message = glGetShaderInfoLog(shader_id)
         glDeleteShader(shader_id)  # taking shader out of memory if it does not compile
-        error_message = "\n" + error_message
         raise Exception(error_message)
     return shader_id
 
