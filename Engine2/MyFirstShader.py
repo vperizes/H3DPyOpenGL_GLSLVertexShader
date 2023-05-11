@@ -34,34 +34,11 @@ void main()
 class MyFirstShader(PyOGLApp):
     def __init__(self):
         super().__init__(2200, 200, 1000, 800)
-        self.vao_id = None  # vao = vertex array object
-        self.vertex_count = 0
+        self.square = None
 
     def initialise(self):
         self.program_id = create_program(vertex_shader, fragment_shader)
-        # vao stores all states needed to supply vertex data to graphics pipeline - i.e. format of vertex data,
-        # location of vertex data in memory, and associated attribs (color, texture coords, etc)
-        self.vao_id = glGenVertexArrays(1)  # creating a single new VAO id/ref
-        glBindVertexArray(self.vao_id)  # vao is now bound and state of vertex attribute array is set - this defines
-        # layout and data state of vertex data in VBO (vertex buffer obj)
-        glLineWidth(2)
-        position_data = [[0, -0.9, 0],
-                    [-0.6, 0.8, 0],
-                    [0.9, -0.2, 0],
-                    [-0.9, -0.2, 0],
-                    [0.6, 0.8, 0]]
-
-        self.vertex_count = len(position_data)  # returns number of vertices
-        position_variable = GraphicsData("vec3", position_data)
-        position_variable.create_variable(self.program_id, "position")
-
-        color_data = [[1, 0, 0],
-                      [0, 1, 0],
-                      [0, 0, 1],
-                      [1, 0, 1],
-                      [1, 1, 0]]
-        color_variable = GraphicsData("vec3", color_data)
-        color_variable.create_variable(self.program_id, "vertex_color")
+        self.square = Square(self.program_id)
 
 
     def camera_init(self):
@@ -70,8 +47,7 @@ class MyFirstShader(PyOGLApp):
     def display(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glUseProgram(self.program_id)
-        glDrawArrays(GL_LINE_LOOP, 0, self.vertex_count)  # able to draw without referencing an array because we bound
-        # the vertex array in initialise method. This uses the last bound vertex array
+        self.square.draw()
 
 
 MyFirstShader().mainloop()
