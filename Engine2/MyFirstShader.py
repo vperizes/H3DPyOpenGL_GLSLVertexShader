@@ -8,20 +8,24 @@ from glapp.GraphicsData import *
 vertex_shader = r'''
 #version 330 core
 in vec3 position;
+in vec3 vertex_color;
+out vec3 color;
+
 void main()
 {
     gl_Position = vec4(position, 1); 
+    color = vertex_color;
 }
 '''
 
 fragment_shader = r'''
 #version 330 core
-
+in vec3 color;
 out vec4 frag_color;
 
 void main()
 {
-    frag_color = vec4(1, 1, 0, 1);
+    frag_color = vec4(color, 1);
 }
 '''
 
@@ -36,7 +40,7 @@ class MyFirstShader(PyOGLApp):
         self.program_id = create_program(vertex_shader, fragment_shader)
         self.vao_id = glGenVertexArrays(1)
         glBindVertexArray(self.vao_id)
-        glPointSize(10)
+        glLineWidth(2)
         position_data = [[0, -0.9, 0],
                     [-0.6, 0.8, 0],
                     [0.9, -0.2, 0],
@@ -46,6 +50,14 @@ class MyFirstShader(PyOGLApp):
         self.vertex_count = len(position_data)  # returns number of vertices
         position_variable = GraphicsData("vec3", position_data)
         position_variable.create_variable(self.program_id, "position")
+
+        color_data = [[1, 0, 0],
+                      [0, 1, 0],
+                      [0, 0, 1],
+                      [1, 0, 1],
+                      [1, 1, 0]]
+        color_variable = GraphicsData("vec3", color_data)
+        color_variable.create_variable(self.program_id, "vertex_color")
 
 
     def camera_init(self):
