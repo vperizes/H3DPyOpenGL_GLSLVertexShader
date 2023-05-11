@@ -3,6 +3,7 @@ from glapp.Utils import *
 import numpy as np
 from OpenGL.arrays.vbo import VBO
 from glapp.GraphicsData import *
+from glapp.Square import *
 
 # simple shader that draws a point at 0, 0, 0 and colors it green
 vertex_shader = r'''
@@ -38,8 +39,11 @@ class MyFirstShader(PyOGLApp):
 
     def initialise(self):
         self.program_id = create_program(vertex_shader, fragment_shader)
-        self.vao_id = glGenVertexArrays(1)
-        glBindVertexArray(self.vao_id)
+        # vao stores all states needed to supply vertex data to graphics pipeline - i.e. format of vertex data,
+        # location of vertex data in memory, and associated attribs (color, texture coords, etc)
+        self.vao_id = glGenVertexArrays(1)  # creating a single new VAO id/ref
+        glBindVertexArray(self.vao_id)  # vao is now bound and state of vertex attribute array is set - this defines
+        # layout and data state of vertex data in VBO (vertex buffer obj)
         glLineWidth(2)
         position_data = [[0, -0.9, 0],
                     [-0.6, 0.8, 0],
