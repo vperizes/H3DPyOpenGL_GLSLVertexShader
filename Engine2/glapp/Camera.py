@@ -36,8 +36,16 @@ class Camera:
                          [0, 0, -1, 0]], np.float32)
 
     def rotate_camera(self, yaw, pitch):
+        # need to compare angle of local forward vector with global up vector in order to stop camera from rotating
+        # to high or too low
+        # getting forward facing vector from camera. Calling indexes of z column in transformation matrix
+        forward = pygame.Vector3(self.transformation[0, 2], self.transformation[1, 2], self.transformation[2, 2])
+        up = pygame.Vector3(0, 1, 0)
+        angle = forward.angle_to(up)
         self.transformation = rotate(self.transformation, yaw, "y", False)
-        self.transformation = rotate(self.transformation, pitch, "x", True)
+        # this if statement lock camera pitch between specific angle range
+        if angle < 170.0 and pitch > 0 or angle > 20.0 and pitch < 0:
+            self.transformation = rotate(self.transformation, pitch, "x", True)
 
 
     def update_camera(self):
