@@ -17,7 +17,7 @@ class PyOGLApp:
         pygame.display.gl_set_attribute(pygame.GL_CONTEXT_PROFILE_MASK, pygame.GL_CONTEXT_PROFILE_CORE)
         self.screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPENGL)
         pygame.display.set_caption('OpenGL in Python')
-        self.camera = Camera()
+        self.camera = None
         self.program_id = None
 
     def draw_world_axes(self):
@@ -73,8 +73,7 @@ class PyOGLApp:
         done = False
         self.initialise()
         pygame.event.set_grab(True)  # grabs hold of mouse. Not usable for other windows when app is running
-        pygame.mouse.set_visible(
-            False)  # mouse is no longer visible. Can't use it to shut window down --> program key press
+        pygame.mouse.set_visible(False)  # mouse is no longer visible. Can't use it to shut window down --> program key press
 
         while not done:
             for event in pygame.event.get():

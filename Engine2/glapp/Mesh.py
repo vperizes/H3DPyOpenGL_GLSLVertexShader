@@ -4,6 +4,7 @@ from .GraphicsData import *
 import numpy as np
 from pygame import *
 from .Uniform import *
+from .Transformations import *
 
 
 class Mesh:
@@ -16,10 +17,11 @@ class Mesh:
         position.create_variable(program_id, "position")
         colors = GraphicsData("vec3", vertex_colors)
         colors.create_variable(program_id, "vertex_color")
-        self.translation = Uniform("vec3", translation)
-        self.translation.find_variable(program_id, "translation")
+        self.transformation_mat = identity_matrix()
+        self.transformation = Uniform("mat4", self.transformation_mat)
+        self.transformation.find_variable(program_id, "model_mat")
 
     def draw(self):
-        self.translation.load()  # need to load translation data before binding
+        self.transformation.load()  # need to load transformation data before binding
         glBindVertexArray(self.vao_id)
         glDrawArrays(self.draw_type, 0, len(self.vertices))
