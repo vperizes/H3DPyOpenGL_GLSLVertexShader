@@ -15,21 +15,20 @@ class Camera:
         self.last_mouse = pygame.math.Vector2(0, 0)  # initial value for mouse position, stores last mouse pos
         self.mouse_sensitivityX = 0.1
         self.mouse_sensitivityY = 0.1
-        self.key_sensitivity = 0.8
+        self.key_sensitivity = 0.08
         self.projection_matrix = self.perspective_mat(60, width/height, 0.01, 1000)
         self.projection = Uniform("mat4", self.projection_matrix)
         self.projection.find_variable(program_id, "projection_mat")
-        self.program_id = program_id
         self.screen_width = width
         self.screen_height = height
-
+        self.program_id = program_id
 
     def perspective_mat(self, angle_of_view, aspect_ratio, near_plane, far_plane):
         a = radians(angle_of_view)
-        d = 1.0/tan(a/2)
+        d = 1.0 / tan(a/2.0)
         r = aspect_ratio
-        b = (far_plane + near_plane)/near_plane - far_plane
-        c = (far_plane * near_plane)/near_plane - far_plane
+        b = (far_plane + near_plane)/(near_plane - far_plane)
+        c = (far_plane * near_plane)/(near_plane - far_plane)
         # transpose of perspective matrix used because of order of matrix multiplication
         return np.array([[d/r, 0, 0, 0],
                          [0, d, 0, 0],
@@ -46,7 +45,8 @@ class Camera:
             return
         mouse_pos = pygame.mouse.get_pos()
         mouse_change = self.last_mouse - pygame.math.Vector2(mouse_pos)
-        pygame.mouse.set_pos(self.screen_width/2, self.screen_height/2)  # put mouse back in center of screen after a movement
+        pygame.mouse.set_pos(self.screen_width/2, self.screen_height/2)  # put mouse back in center of screen after a
+        # movement
         self.last_mouse = pygame.mouse.get_pos()  # updates last_mouse
         # we use the mouse_change x pos for the yaw (rotate about y-axis) b/c the x pos of mouse acts as the moment arm
         # to allow rotation to happen. Same idea for using mouse_change.y for pitch
