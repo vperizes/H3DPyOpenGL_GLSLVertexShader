@@ -79,7 +79,7 @@ def scale3(matrix, x, y, z):
     return matrix @ sc
 
 
-def rotate(matrix, angle, axis):
+def rotate(matrix, angle, axis, local = True):
     rot = identity_matrix()
     if axis == "x":
         rot = rotate_x_matrix(angle)
@@ -87,6 +87,9 @@ def rotate(matrix, angle, axis):
         rot = rotate_y_matrix(angle)
     elif axis == "z":
         rot = rotate_z_matrix(angle)
-
-    return matrix @ rot
+    # distinguished how rotation should be handled based on local v global coords/axes
+    if local:
+        return matrix @ rot
+    else:
+        return rot @ matrix
 

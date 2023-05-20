@@ -36,8 +36,8 @@ class Camera:
                          [0, 0, -1, 0]], np.float32)
 
     def rotate_camera(self, yaw, pitch):
-        self.transformation = rotate(self.transformation, yaw, "y")
-        self.transformation = rotate(self.transformation, pitch, "x")
+        self.transformation = rotate(self.transformation, yaw, "y", False)
+        self.transformation = rotate(self.transformation, pitch, "x", True)
 
 
     def update_camera(self):
